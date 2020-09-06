@@ -1,0 +1,29 @@
+
+<!DOCTYPE html>
+<html>
+        <script type=text/javascript src="{{url_for('static', filename='jQuery.js') }}"></script>
+        <script>
+        function test(){
+                var text_data = $('#SensorID').val();
+                $.ajax({
+                        type : 'POST',                                 
+                        url : 'http://192.168.0.2:5000/request',
+                        data : {
+                               SensorID:text_data                     
+                        },
+                        dataType : 'JSON',
+                        success : function(result){
+                                alert("result = "+ result);
+                        },
+                        error : function(xtr,status,error){
+                                alert(xtr +":"+status+":"+error);
+                        }
+                });
+        }
+        </script>
+        <body>
+                <p>검색하고자 하는 아이템을 입력하세요.</p>
+                <input type = "text" name="SensorID" id="SensorID"/>
+                <input type = "button" value = "데이터 요청" onclick="test()"/>
+        </body>
+</html>

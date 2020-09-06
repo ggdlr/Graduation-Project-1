@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+    <!-- Bootstrap core CSS -->
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="{{ url_for('static', filename='css/mdb.min.css')}}" rel="stylesheet">
+    <!-- Your custom styles (optional) -->
+    <link href="{{ url_for('static', filename='css/style.min.css')}}" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {font-family: Arial, Helvetica, sans-serif;}
+        
+        /* The Modal (background) */
+        .modal {
+          display: none; /* Hidden by default */
+          position: fixed; /* Stay in place */
+          z-index: 1; /* Sit on top */
+          padding-top: 100px; /* Location of the box */
+          left: 0;
+          top: 0;
+          width: 100%; /* Full width */
+          height: 100%; /* Full height */
+          overflow: auto; /* Enable scroll if needed */
+          background-color: rgb(0,0,0); /* Fallback color */
+          background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+        
+        /* Modal Content */
+        .modal-content {
+          background-color: #fefefe;
+          margin: auto;
+          padding: 20px;
+          border: 1px solid #888;
+          width: 80%;
+        }
+        
+        /* The Close Button */
+        .close {
+          color: #aaaaaa;
+          float: right;
+          font-size: 28px;
+          font-weight: bold;
+        }
+        
+        .close:hover,
+        .close:focus {
+          color: #000;
+          text-decoration: none;
+          cursor: pointer;
+        }
+        </style>
+    <script src="//cdnjs.cloudflare.com/ajac/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+    <!-- Modal -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            
+    
+                <!-- Section: Block Content -->
+                <section>
+              
+                  <div class="card card-list">
+                    <div class="card-header white d-flex justify-content-between align-items-center py-3">
+                      <p class="h5-responsive font-weight-bold mb-0"><i class="fas fa-envelope pr-2"></i>New Discussion</p>
+                      <span class="close">&times;</span>
+                      <!-- <p class="h5-responsive font-weight-bold mb-0"><a><i class="fas fa-times"></i></a></p> -->
+                    </div>
+                    <div class="card-body">
+                      <input type="text" id="exampleForm3" placeholder="Subject" class="form-control rounded-0 mb-4">
+                      <textarea name="message" id="post_content" style="resize: none; width: 100%; height: 100px;"></textarea>
+                    </div>
+                    <div class="card-footer white py-3">
+                      <div class="text-right">
+                        <button class="btn btn-primary btn-md px-3 my-0 mr-0">Send<i class="fas fa-paper-plane pl-2"></i></button>
+                      </div>
+                    </div>
+                  </div>
+              
+                </section>
+                <!-- Section: Block Content -->
+              
+              
+        </div>
+    
+    </div>
+    <form action="/team" method = "post">
+    <div class="container my-5">
+        <h2 class="font-weight-bold text-center dark-grey-text pb-2">Team Name</h4>
+        <h3 class="font-weight-bold text-center dark-grey-text pb-2">Describe Team</h3>
+        
+        <div class="row"><h3>Teammates</h3></div>
+        <div class="row">
+            
+            <div class="col md-10">Member list</div>
+            <div class="col md-2"><button type = "submit" name="adduser">Add more</button></div>
+            
+        </div>
+        <div class="row"><a href="">Manage members ></a></div>
+
+        <div class="row"><h3>Team's Developement Environment</h3></div>
+        {% for i in range(len) %}
+            <div class="row" >
+                <div class="cell">{{vmlist[i]}}</div>
+            </div>
+        {% endfor %}
+        <div><button type='submit' name="create">create new environment</button></div>
+
+        <div class="row"><h3>Discussion Boards</h3></div>
+        <div><button onclick="newDiscussion()">new discussion</button></div> 
+    </div>
+    </form>
+</body>
+<script>
+    // tinymce.init({ selector:'#post_content', menubar: false, height : "294" });
+
+    var modal = document.getElementById("myModal");
+    var btn = document.getElementById("newDiscussion");
+    var span = document.getElementsByClassName("close")[0];
+
+    function newDiscussion(){
+        modal.style.display = "block";
+    }
+    span.onclick = function(){
+        modal.style.display = "none";
+    }
+    window.onclick = function(event){
+        if(event.target == modal){
+            modal.style.display = "none";
+        }
+    }
+
+</script>
+</html>

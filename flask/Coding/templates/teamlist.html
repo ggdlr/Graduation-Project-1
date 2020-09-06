@@ -1,0 +1,58 @@
+<link rel="icon" type="image/png" href="static/img/icons/favicon.ico"/>
+<!-- <link rel="stylesheet" type="text/css" href="static/vendor/bootstrap/css/bootstrap.min.css"> -->
+<link rel="stylesheet" type="text/css" href="static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="static/vendor/animate/animate.css">
+<link rel="stylesheet" type="text/css" href="static/vendor/select2/select2.min.css">
+<link rel="stylesheet" type="text/css" href="static/vendor/perfect-scrollbar/perfect-scrollbar.css">
+<link rel="stylesheet" type="text/css" href="static/css/util.css">
+<link rel="stylesheet" type="text/css" href="static/css/main.css">
+{% extends "base.html" %}
+{% block main %}
+    
+    <form action="/team" method = "post">
+        <div class="limiter">
+            <div class="container-table100" id = "contents">
+                <div class="wrap-table100">
+                        <div class="text-left"><button class="btn btn-indigo btn-lg" type="submit" name="create">create Team</button></div>
+                        <div class="table" id="table">
+                            <div class="row header">
+                                <div class="cell">
+                                    Team Name
+                                </div>
+                                <div class="cell">
+                                    Description
+                                </div>
+                                
+                            </div>
+                                
+                                    <div class="row" >
+                                        <div class="cell">ex_teamname</div>
+                                        <div class="cell">ex_description</div>
+                                        <div class="cell"><input name = "vm" type = "radio" id = "1" value = "1"></div>
+                                    </div>
+                                
+                                <div class="text-right">
+                                    
+                                    <button type='submit' name="start" class="btn btn-indigo btn-lg">Start</button>                                 
+                                </div>
+                            
+                        </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    
+
+
+    
+
+
+<!--===============================================================================================-->
+    <script src="static/vendor/bootstrap/js/popper.js"></script>
+    <script src="static/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+    <script src="static/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+    <script src="static/js/main.js"></script>
+    
+{% endblock %}
