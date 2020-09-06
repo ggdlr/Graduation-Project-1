@@ -56,8 +56,8 @@
     <script src="//cdnjs.cloudflare.com/ajac/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body>
-    <!-- Modal -->
-    <div id="myModal" class="modal">
+    <!-- Discussion Modal -->
+    <div id="discussionModal" class="modal">
         <div class="modal-content">
             
     
@@ -71,23 +71,49 @@
                       <!-- <p class="h5-responsive font-weight-bold mb-0"><a><i class="fas fa-times"></i></a></p> -->
                     </div>
                     <div class="card-body">
-                      <input type="text" id="exampleForm3" placeholder="Subject" class="form-control rounded-0 mb-4">
-                      <textarea name="message" id="post_content" style="resize: none; width: 100%; height: 100px;"></textarea>
+                      <input type="text" id="subject" placeholder="Subject" class="form-control rounded-0 mb-4">
+                      <textarea name="message" id="context" style="resize: none; width: 100%; height: 100px;"></textarea>
                     </div>
                     <div class="card-footer white py-3">
                       <div class="text-right">
-                        <button class="btn btn-primary btn-md px-3 my-0 mr-0">Send<i class="fas fa-paper-plane pl-2"></i></button>
+                        <button class="btn btn-primary btn-md px-3 my-0 mr-0" onclick="submit()">Submit<i class="fas fa-paper-plane pl-2"></i></button>
                       </div>
                     </div>
                   </div>
-              
-                </section>
-                <!-- Section: Block Content -->
-              
-              
+                </section> 
         </div>
-    
     </div>
+    <!-- End Discussion Modal -->
+
+    <!-- Add User Modal gotta be fixed size!!! -->
+    <div id="discussionModal" class="modal">
+      <div class="modal-content">
+          
+  
+              <!-- Section: Block Content -->
+              <section>
+            
+                <div class="card card-list">
+                  <div class="card-header white d-flex justify-content-between align-items-center py-3">
+                    <p class="h5-responsive font-weight-bold mb-0"><i class="fas fa-envelope pr-2"></i>Add user</p>
+                    <span class="close">&times;</span>
+                    <!-- <p class="h5-responsive font-weight-bold mb-0"><a><i class="fas fa-times"></i></a></p> -->
+                  </div>
+                  <div class="card-body">
+                    <input type="text" id="userID" placeholder="user ID" class="form-control rounded-0 mb-4">
+                    <!-- <textarea name="message" id="context" style="resize: none; width: 100%; height: 100px;"></textarea> -->
+                  </div>
+                  <div class="card-footer white py-3">
+                    <div class="text-right">
+                      <button class="btn btn-primary btn-md px-3 my-0 mr-0" onclick="inviteUser()">Invite<i class="fas fa-paper-plane pl-2"></i></button>
+                    </div>
+                  </div>
+                </div>
+              </section> 
+      </div>
+  </div>
+  <!-- End Add User Modal -->
+
     <form action="/team" method = "post">
     <div class="container my-5">
         <h2 class="font-weight-bold text-center dark-grey-text pb-2">Team Name</h4>
@@ -97,7 +123,7 @@
         <div class="row">
             
             <div class="col md-10">Member list</div>
-            <div class="col md-2"><button type = "submit" name="adduser">Add more</button></div>
+            <div class="col md-2"><button type = "submit" name="adduser" onclick="addUser()">Add more</button></div>
             
         </div>
         <div class="row"><a href="">Manage members ></a></div>
@@ -111,28 +137,91 @@
         <div><button type='submit' name="create">create new environment</button></div>
 
         <div class="row"><h3>Discussion Boards</h3></div>
-        <div><button onclick="newDiscussion()">new discussion</button></div> 
+        <div id="discussionList">
+          {% for subject, description in subjects, descriptions %}
+          <div class="row">
+            <div class="col md-3">{{ subject }}</div>
+            <div class="col md-9">{{ description }}</div>
+          </div>
+          {% endfor %}
+          <div class="row">
+            <div class="col md-3">ex_subject</div>
+            <div class="col md-9">ex_context</div>
+          </div>
+        </div>
+        <div><button onclick="newDiscussion()">new discussion</button></div>
     </div>
     </form>
 </body>
 <script>
-    // tinymce.init({ selector:'#post_content', menubar: false, height : "294" });
+  // tinymce.init({ selector:'#post_content', menubar: false, height : "294" });
 
-    var modal = document.getElementById("myModal");
-    var btn = document.getElementById("newDiscussion");
-    var span = document.getElementsByClassName("close")[0];
+  var discussion_modal = document.getElementById("discussionModal");
+  var addUser_modal = document.getElementById("addUserModal");
+  var btn = document.getElementById("newDiscussion");
+  var span = document.getElementsByClassName("close")[0];
 
-    function newDiscussion(){
-        modal.style.display = "block";
+  function addUser(){
+    addUser_modal.style.display = "block";
+  }
+  function newDiscussion(){
+    discussion_modal.style.display = "block";
+  }
+  span.onclick = function(){
+    discussion_modal.style.display = "none";
+    addUser_modal.style.display = "none";
+  }
+  window.onclick = function(event){
+    if(event.target == modal){
+        discussion_modal.style.display = "none";
+        addUser_modal.style.display = "none";
     }
-    span.onclick = function(){
-        modal.style.display = "none";
-    }
-    window.onclick = function(event){
-        if(event.target == modal){
-            modal.style.display = "none";
-        }
-    }
+  }
+
+  function inviteUser(){
+    userId = $('#userID').val();
+    addUser_modal.style.display = "none";
+    $.ajax({
+      type: 'POST',
+      url: 'http://192.168.0.96:5000/functionName',
+      data: {
+        userId: userId
+      },
+      dataType: 'JSON',
+      success: function(){
+        alert("Sent!")
+      }
+    })
+  }
+
+  function submit(){
+    subject = $('#subject').val();
+    context = $('#context').val();
+    discussion_modal.style.display = "none";
+    $.ajax({
+      type: 'POST',
+      url: 'http://192.168.0.96:5000/functionName',
+      data: {
+        subject: subject,
+        context: context
+      },
+      dataType: 'JSON',
+      success: function(){
+        var row_div = document.createElement("DIV");
+        var subject_div = document.createElement("DIV");
+        var context_div = document.createElement("DIV");
+        subject_div.innerHTML = 'icon' + subject;
+        subject_div.className = "col md-3";
+        context_div.innerHTML = 'icon' + context;
+        context_div.className = "col md-9";
+        row_div.className="row";
+        row_div.appendChild(subject_div);
+        row_div.appendChild(context_div);
+        document.getElementById("discussionList").appendChild(row_div);
+        alert("Done!");
+      }
+    });
+  }
 
 </script>
 </html>

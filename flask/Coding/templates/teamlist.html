@@ -6,46 +6,120 @@
 <link rel="stylesheet" type="text/css" href="static/vendor/perfect-scrollbar/perfect-scrollbar.css">
 <link rel="stylesheet" type="text/css" href="static/css/util.css">
 <link rel="stylesheet" type="text/css" href="static/css/main.css">
+<style>
+    body {font-family: Arial, Helvetica, sans-serif;}
+    
+    /* The Modal (background) */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      padding-top: 100px; /* Location of the box */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+    
+    /* Modal Content */
+    .modal-content {
+      background-color: #fefefe;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+    }
+    
+    /* The Close Button */
+    .close {
+      color: #aaaaaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    
+    .close:hover,
+    .close:focus {
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    </style>
 {% extends "base.html" %}
 {% block main %}
-    
-    <form action="/team" method = "post">
+<!-- Modal -->
+<div id="myModal" class="modal">
+    <div class="modal-content">
+            <!-- Section: Block Content -->
+            <section>
+          
+              <div class="card card-list">
+                <div class="card-header white d-flex justify-content-between align-items-center py-3">
+                  <p class="h5-responsive font-weight-bold mb-0"><i class="fas fa-envelope pr-2"></i>Create New Team</p>
+                  <span class="close">&times;</span>
+                  <!-- <p class="h5-responsive font-weight-bold mb-0"><a><i class="fas fa-times"></i></a></p> -->
+                </div>
+                <div class="card-body">
+                  <input type="text" id="teamName" placeholder="Team Name" class="form-control rounded-0 mb-4">
+                  <textarea name="message" id="teamDescription" style="resize: none; width: 100%; height: 100px;"></textarea>
+                </div>
+                <div class="card-footer white py-3">
+                  <div class="text-right">
+                    <button class="btn btn-primary btn-md px-3 my-0 mr-0" onclick="newTeam()">Create<i class="fas fa-plus"></i></button>
+                  </div>
+                </div>
+              </div>
+          
+            </section>
+            <!-- Section: Block Content -->
+    </div>
+</div>   
+<!-- end modal -->
+
+    <form action="/team" method = "post" name="team" id="team">
         <div class="limiter">
             <div class="container-table100" id = "contents">
                 <div class="wrap-table100">
-                        <div class="text-left"><button class="btn btn-indigo btn-lg" type="submit" name="create">create Team</button></div>
-                        <div class="table" id="table">
-                            <div class="row header">
-                                <div class="cell">
-                                    Team Name
-                                </div>
-                                <div class="cell">
-                                    Description
-                                </div>
-                                
+                    <div class="text-left"><button class="btn btn-indigo btn-lg" type="submit" name="create" onclick="createTeam()">create Team</button></div>
+                    <div class="table" id="table">
+                        <div class="row header">
+                            <div class="cell">
+                                Team Name
                             </div>
-                                
-                                    <div class="row" >
-                                        <div class="cell">ex_teamname</div>
-                                        <div class="cell">ex_description</div>
-                                        <div class="cell"><input name = "vm" type = "radio" id = "1" value = "1"></div>
-                                    </div>
-                                
-                                <div class="text-right">
-                                    
-                                    <button type='submit' name="start" class="btn btn-indigo btn-lg">Start</button>                                 
-                                </div>
+                            <div class="cell">
+                                Description
+                            </div>
                             
                         </div>
+                        
+                        {% for team in teamlist %}
+                        <div class="row">
+                            <div class="cell">{{teamName}}</div>
+                            <div class="cell">{{teamDescription}}</div>
+                            <div class="cell"><input type="radio" name = "teamName" value = {{teamName}}></div>
+                        </div>
+                        {% endfor %}
+
+                        <!-- for test -->
+                        <div class="row" >
+                            <div class="cell">ex_teamname</div>
+                            <div class="cell">ex_description</div>
+                            <div class="cell"><input name = "vm" type = "radio" id = "1" value = "1"></div>
+                        </div>
+                            
+                        <div class="text-right">
+                            <button type='submit' name="goTeam" class="btn btn-indigo btn-lg">Go Team</button>                                 
+                        </div>
+                        
+                    </div>
                 </div>
             </div>
         </div>
     </form>
     
-
-
-    
-
 
 <!--===============================================================================================-->
     <script src="static/vendor/bootstrap/js/popper.js"></script>
@@ -54,5 +128,46 @@
     <script src="static/vendor/select2/select2.min.js"></script>
 <!--===============================================================================================-->
     <script src="static/js/main.js"></script>
-    
-{% endblock %}
+
+    <script>
+        
+
+        
+        // modal
+
+        var modal = document.getElementById("myModal");
+        // var btn = document.getElementById("newDiscussion");
+        var span = document.getElementsByClassName("close")[0];
+
+        // when you click the createTeam button
+        function createTeam(){
+            modal.style.display = "block";
+        }
+        span.onclick = function(){
+            modal.style.display = "none";
+        }
+        window.onclick = function(event){
+            if(event.target == modal){
+                modal.style.display = "none";
+            }
+        }
+
+        // when you click the createTeam button in the modal window
+        function newTeam(){
+            teamName = $('#teamName').val();
+            teamDescription = $('#teamDescription').val();
+            modal.style.display = "none";
+            $.ajax({
+                type: 'POST',
+                url: 'http://192.168.0.96:5000/functionName',
+                data: {
+                    teamName: teamName,
+                    teamDescription: teamDescription
+                },
+                dataType: 'JSON',
+                success: function(data){
+                    alert("created successfully");
+                }
+            });
+        }
+    </script>
